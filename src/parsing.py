@@ -13,6 +13,8 @@ class Comment:
     video_id: str
     likes: int
     replies: int
+    unique_repliers: int
+    most_liked_reply: int
     date_posted: datetime
     content: str
     is_reply: bool = False
@@ -51,7 +53,7 @@ def read_takeout(complete_path: str) -> List[Comment]:
                 comments.append(Comment(
                     regex_data[1],
                     regex_data[0],
-                    -1, -1,
+                    -1, -1, -1, -1,
                     datetime.strptime(regex_data[2], "%Y-%m-%d %H:%M:%S %Z"),
                     content=replace_html_escapes(regex_data[3]),
                     is_reply=is_reply
@@ -67,6 +69,8 @@ def save_backup(comments: List[Comment], complete_path: str):
             "video_id": comment.video_id,
             "likes": comment.likes,
             "replies": comment.replies,
+            "unique_repliers": comment.unique_repliers,
+            "most_liked_reply": comment.most_liked_reply,
             "date_posted": comment.date_posted.timestamp(),
             "content": comment.content,
             "is_reply": comment.is_reply
@@ -86,6 +90,8 @@ def load_backup(complete_path: str) -> List[Comment]:
                 video_id=comment_json["video_id"],
                 likes=comment_json["likes"],
                 replies=comment_json["replies"],
+                unique_repliers=comment_json["unique_repliers"],
+                most_liked_reply=comment_json["most_liked_reply"],
                 date_posted=datetime.utcfromtimestamp(comment_json["date_posted"]),
                 content=comment_json["content"],
                 is_reply=comment_json["is_reply"]
