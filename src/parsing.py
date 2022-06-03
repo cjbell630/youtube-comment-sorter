@@ -17,6 +17,12 @@ class Comment:
     content: str
     is_reply: bool = False
 
+    def __str__(self):
+        return f"https://www.youtube.com/watch?v={self.video_id}&lc={self.id}\n" \
+               f"◢◣  {self.date_posted.astimezone().strftime('%c')}\n" \
+               f"◥◤      {self.content}\n" \
+               f"    👍{self.likes:8}      👎    Replies: {self.replies}"
+
 
 COMMENTS: List[Comment] = []
 REGEX = {
