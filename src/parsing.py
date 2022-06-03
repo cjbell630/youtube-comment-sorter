@@ -50,3 +50,4 @@ def read_takeout(complete_path: str) -> List[Comment]:
                     is_reply=is_reply
                 ))
         return comments
+

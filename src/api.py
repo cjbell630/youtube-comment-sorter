@@ -13,12 +13,22 @@ class YouTubeAPI(Api):
         count = 0
 
         for comment in comments:
-            api_response = self.get_comment_thread_by_id(comment_thread_id=comment.id)
+            api_response = self.get_comment_by_id(comment_id=comment.id)
             if len(api_response.items) > 0:  # make sure successful
                 comment.likes = api_response.items[0].snippet.likeCount
                 # TODO reply
+
             else:
                 print("problem occurred smh\n\n" + comment.content + "\n\n" + str(api_response) + "\n\n" + comment.id)
+
+            if comment.is_reply:
+                comment.replies = 0
+            else:
+                api_response = self.get_comments(parent_id=comment.id)
+                comment.replies = len(api_response.items)
+                print(api_response.items)
+
+
             if count > 50:
                 return
             else:
