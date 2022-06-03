@@ -9,7 +9,7 @@ def dict_to_json_string(elem):
     elif type(elem) is list:
         return "[" + ", ".join([dict_to_json_string(e) for e in elem]) + "]"
     elif type(elem) is str:
-        return "\"" + elem.replace("\"", "\\\"").replace("\n", "\\n") + "\""
+        return "\"" + elem.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + "\""
     elif type(elem) is bool:
         return "\"true\"" if elem else "\"false\""
     else:
