@@ -14,7 +14,6 @@ class YouTubeAPI(Api):
             api_response = self.get_comment_by_id(comment_id=comment.id)
             if len(api_response.items) > 0:  # make sure successful
                 comment.likes = api_response.items[0].snippet.likeCount
-                print(api_response.items[0].snippet)
 
                 comment.unique_repliers = 0
                 comment.most_liked_reply = 0
@@ -27,14 +26,13 @@ class YouTubeAPI(Api):
 
                     api_response = self.get_comments(parent_id=comment.id)
                     comment.replies = len(api_response.items)
-                    if comment.replies > 0:
-                        for reply in api_response.items:
-                            if reply.snippet.authorDisplayName != my_display_name:
-                                comment.most_liked_reply = max(reply.snippet.likeCount, comment.most_liked_reply)
-                                if reply.snippet.authorDisplayName not in found_display_names:
-                                    comment.unique_repliers += 1
-                                    found_display_names.append(reply.snippet.authorDisplayName)
-                        print(api_response.items[0].snippet)
+                    if comment.replies > 0: # if there are replies to this comment
+                        for reply in api_response.items: # iterate through replies
+                            if reply.snippet.authorDisplayName != my_display_name: # if the reply was not made by op
+                                comment.most_liked_reply = max(reply.snippet.likeCount, comment.most_liked_reply) # get the number of likes of the most liked reply
+                                if reply.snippet.authorDisplayName not in found_display_names: # if a reply to this comment by this user has not been seen yet
+                                    comment.unique_repliers += 1 # count them as a unique replier
+                                    found_display_names.append(reply.snippet.authorDisplayName) # add their name to the list of repliers
 
             else:
                 # print("problem occurred smh\n\n" + comment.content + "\n\n" + str(api_response) + "\n\n" + comment.id)
